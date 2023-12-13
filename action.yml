@@ -1,8 +1,7 @@
 ---
 name: IntelliJ Code Format
 description: |
-  Runs the IntelliJ formatter on a project to apply IDE style rules. 
-  Useful for auto-fixing, as well as enforcing style rules.
+  Runs the IntelliJ formatter to apply the IDE style rules.
 inputs:
   include-glob:
     description: |
