@@ -1,0 +1,41 @@
+---
+name: IntelliJ Code Format
+description: |
+  Runs the IntelliJ formatter on a project to apply IDE style rules. 
+  Useful for auto-fixing, as well as enforcing style rules.
+inputs:
+  include-glob:
+    description: |
+      Pattern for files to include. Supports glob-style wildcards. Multiple patterns can be separated by commas.
+    required: false
+    default: '*'
+  path:
+    description: |
+      Path to project directory. The formatter is executed recursively from here. Must be relative to the workspace.
+    required: false
+    default: '.'
+  commit-on-changes:
+    description: If true, the action will commit if any file changed.
+    required: false
+    default: 'true'
+  commit-message:
+    description: |
+      The commit message to use when committing. Only used if commit-on-changes is true.
+    required: false
+    default: 'IntelliJ Code Format'
+  fail-on-changes:
+    description: If true, the action will fail if any file changed.
+    required: false
+    default: 'true'
+outputs:
+  files-changed:
+    description: Zero if none changed, greater if at least one file changed.
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.path }}
+    - ${{ inputs.include-glob }}
+    - ${{ inputs.commit-on-changes }}
+    - ${{ inputs.commit-message }}
+    - ${{ inputs.fail-on-changes }}

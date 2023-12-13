@@ -1,0 +1,15 @@
+name: IntelliJ Test Format
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          include-glob: '*.java'
+          path: test/
