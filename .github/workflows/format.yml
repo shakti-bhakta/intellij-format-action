@@ -13,3 +13,4 @@ jobs:
         with:
           include-glob: '*.java'
           path: test/
+          commit-on-changes: 'false'
