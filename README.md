@@ -66,7 +66,11 @@ The commit message to use when committing.<br>
 If true, the action will fail if any file changed.<br>
 **Default:** `true`
 
+### `style-settings-file`
+A path to IntelliJ IDEA code style settings .xml file.<br>
+**Default:** `unset`
+
 ## Outputs
 ### `files-changed`
-Outputs the amount of files which were formatted.<br>
+Outputs the number of files which were formatted.<br>
 Zero if none changed.

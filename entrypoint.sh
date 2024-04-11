@@ -1,13 +1,7 @@
 #!/bin/bash
 
-# Wrapper for the formatter that passes action args and processes the output.
-# Required args:
-# - Path to base directory.
-# - File include glob pattern.
-# - Whether to commit on file changes.
-
-if [[ $# -ne 5 ]]; then
-  echo 'Exactly four parameters (base dir path, input file pattern, commit on changes, commit message) required.'
+if [[ $# -ne 6 ]]; then
+  echo 'Exactly six parameters required: path, include-glob, commit-on-changes, commit-message, fail-on-changes, style-settings-file'
   exit 1
 fi
 
@@ -16,13 +10,20 @@ include_pattern=$2
 commit_on_changes=$3
 commit_message=$4
 fail_on_changes=$5
+style_settings_file=$6
+
+style_flags=""
+
+if [[ "$style_settings_file" != "unset" ]]; then
+  style_flags="-s $style_settings_file"
+fi
 
 git config --global --add safe.directory /github/workspace
 
 cd "/github/workspace/$base_path" || exit 2
 changed_files_before=$(git status --short)
 
-/opt/idea/bin/format.sh -m $include_pattern -r .
+/opt/idea/bin/format.sh -m $include_pattern $style_flags -r .
 
 changed_files_after=$(git status --short)
 changed_files=$(diff <(echo "$changed_files_before") <(echo "$changed_files_after"))
