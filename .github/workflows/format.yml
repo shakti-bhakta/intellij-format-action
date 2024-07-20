@@ -3,12 +3,19 @@ name: IntelliJ Test Format
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   formatting:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - if: github.event_name != 'pull_request'
+        uses: actions/checkout@v3
+      - if: github.event_name == 'pull_request'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: ./
         with:
           include-glob: '*.java'
