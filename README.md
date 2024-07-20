@@ -14,8 +14,8 @@ jobs:
   formatting:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: notdevcody/intellij-format-action@v1
+      - uses: actions/checkout@v4
+      - uses: notdevcody/intellij-format-action@v1.1
 ```
 ---
 
@@ -34,13 +34,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: github.event_name != 'pull_request'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - if: github.event_name == 'pull_request'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/checkout@v3
-      - uses: notdevcody/intellij-format-action@v1
+      - uses: notdevcody/intellij-format-action@v1.1
 ```
 
 ## Inputs
