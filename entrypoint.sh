@@ -12,10 +12,19 @@ commit_message=$4
 fail_on_changes=$5
 style_settings_file=$6
 
-style_flags=""
+style_flags="-allowDefaults"
 
 if [[ "$style_settings_file" != "unset" ]]; then
   style_flags="-s $style_settings_file"
+fi
+
+IDEA_DIR=${IDEA_CACHE_DIR:-"/github/workflow/idea-cache"}
+
+if [ ! -d "$IDEA_DIR/bin" ]; then
+  wget --no-verbose -O /tmp/idea.tar.gz https://download.jetbrains.com/idea/ideaIC-2024.2.0.1.tar.gz
+  mkdir -p "$IDEA_DIR"
+  tar xzf /tmp/idea.tar.gz -C "$IDEA_DIR" --strip-components=1
+  rm /tmp/idea.tar.gz
 fi
 
 git config --global --add safe.directory /github/workspace
@@ -23,7 +32,7 @@ git config --global --add safe.directory /github/workspace
 cd "/github/workspace/$base_path" || exit 2
 changed_files_before=$(git status --short)
 
-/opt/idea/bin/format.sh -m $include_pattern $style_flags -r .
+"$IDEA_DIR/bin/format.sh" -m $include_pattern $style_flags -r .
 
 changed_files_after=$(git status --short)
 changed_files=$(diff <(echo "$changed_files_before") <(echo "$changed_files_after"))
