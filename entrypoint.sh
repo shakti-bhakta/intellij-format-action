@@ -43,9 +43,9 @@ echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
 if [[ "$commit_on_changes" == 'true' ]]; then
   if [[ $changed_files_count -gt 0 ]]; then
-    git config user.name github-actions
-    git config user.email ''
-    git commit --all -m "$commit_message"
+    git config user.name 'GitHub'
+    git config user.email 'noreply@github.com'
+    git commit --all -m "$commit_message" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
     git push
   fi
 fi
