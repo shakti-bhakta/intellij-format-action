@@ -2,7 +2,8 @@ name: IntelliJ Test Format
 
 on:
   pull_request:
-
+    paths:
+      - '*'
 jobs:
   formatting:
     runs-on: ubuntu-latest
