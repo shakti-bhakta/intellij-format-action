@@ -1,16 +1,13 @@
 #!/bin/bash
 
-if [[ $# -ne 6 ]]; then
-  echo 'Exactly six parameters required: path, include-glob, commit-on-changes, commit-message, fail-on-changes, style-settings-file'
+if [[ $# -ne 3 ]]; then
+  echo 'Exactly three parameters required: path, include-glob, style-settings-file'
   exit 1
 fi
 
 base_path=$1
 include_pattern=$2
-commit_on_changes=$3
-commit_message=$4
-fail_on_changes=$5
-style_settings_file=$6
+style_settings_file=$3
 
 style_flags="-allowDefaults"
 
@@ -21,7 +18,8 @@ fi
 IDEA_DIR=${IDEA_CACHE_DIR:-"/github/workflow/idea-cache"}
 
 if [ ! -d "$IDEA_DIR/bin" ]; then
-  wget --no-verbose -O /tmp/idea.tar.gz https://download.jetbrains.com/idea/ideaIC-2024.2.0.1.tar.gz
+  # You can find builds here: https://youtrack.jetbrains.com/articles/IDEA-A-21/IDEA-Latest-Builds-And-Release-Notes
+  wget --no-verbose -O /tmp/idea.tar.gz https://download.jetbrains.com/idea/ideaIC-2024.3.3.tar.gz
   mkdir -p "$IDEA_DIR"
   tar xzf /tmp/idea.tar.gz -C "$IDEA_DIR" --strip-components=1
   rm /tmp/idea.tar.gz
@@ -41,17 +39,7 @@ changed_files_count=$(($(echo "$changed_files" | wc --lines) - 1))
 echo "$changed_files"
 echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
-if [[ "$commit_on_changes" == 'true' ]]; then
-  if [[ $changed_files_count -gt 0 ]]; then
-    git config user.name 'GitHub'
-    git config user.email 'noreply@github.com'
-    git commit --all -m "$commit_message" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-    git push
-  fi
-fi
-
-if [[ "$fail_on_changes" == 'true' ]]; then
-  if [[ $changed_files_count -gt 0 ]]; then
-    exit 1
-  fi
+# Fail on change
+if [[ $changed_files_count -gt 0 ]]; then
+  exit 1
 fi

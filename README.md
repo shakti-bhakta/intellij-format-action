@@ -1,23 +1,20 @@
 # IntelliJ IDEA Format Action
 
-This action automatically formats your code using the IntelliJ formatter, ensuring it adheres to good style guidelines.
+Check if code complies with IntelliJ code style XML.
+Fails the action if it doesn't
 
-## Examples
+## Example
 
-Both examples implement caching of downloaded IDEA files (~900MB). <br>
+The example implements caching of downloaded IDEA files (~900MB). <br>
 Cache generation might take a while on the first run, but saves bandwidth and is faster later on.
-
-This workflow will format all files that are supported by the formatter in your repository and commit the changes whenever there's a push to the `main` branch.
-
 ```yaml
 name: IntelliJ Format
 
 on:
-  push:
-    branches: ["main"]
+  pull_request:
 
 jobs:
-  formatting:
+  check-format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,38 +23,13 @@ jobs:
         with:
           path: /home/runner/work/_temp/_github_workflow/idea-cache
           key: ${{ runner.os }}-idea-cache-v2
-      - uses: notdevcody/intellij-format-action@v2
-```
-
----
-
-This workflow will format all files that are supported by the formatter in your repository and commit the changes whenever there's a push to the `main` branch, including pull requests to it.
-
-```yaml
-name: IntelliJ Format
-
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
-
-jobs:
-  formatting:
-    runs-on: ubuntu-latest
-    steps:
-      - if: github.event_name != 'pull_request'
-        uses: actions/checkout@v4
-      - if: github.event_name == 'pull_request'
-        uses: actions/checkout@v4
+      - uses: shakti-bhakta/intellij-format-action@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: Cache IDEA
-        uses: actions/cache@v3
-        with:
-          path: /home/runner/work/_temp/_github_workflow/idea-cache
-          key: ${{ runner.os }}-idea-cache-v2
-      - uses: notdevcody/intellij-format-action@v2
+          include-glob: '*.java'
+          path: './java-module'
+          style-settings-file: './intellij-format.xml'
+          
+
 ```
 
 ## Inputs
@@ -73,21 +45,6 @@ Pattern for files to include. Supports glob-style wildcards. Multiple patterns c
 
 Path to project directory. The formatter is executed recursively from here. Must be relative to the workspace.<br>
 **Default:** `.`
-
-### `commit-on-changes`
-
-If true, the action will commit any files changed by the formatter.<br>
-**Default:** `true`
-
-### `commit-message`
-
-The commit message to use when committing.<br>
-**Default:** `IntelliJ Code Format`
-
-### `fail-on-changes`
-
-If true, the action will fail if any files were changed.<br>
-**Default:** `true`
 
 ### `style-settings-file`
 
