@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Exit immediately if any command fails
-set -e
+## Exit immediately if any command fails
+#set -e
 
 if [[ $# -ne 3 ]]; then
   echo 'Exactly three parameters required: path, include-pattern, style-settings-file'
