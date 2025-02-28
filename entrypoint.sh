@@ -56,17 +56,16 @@ if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -r .; then
   exit 1
 fi
 
-echo ""
-echo "Files that need formatting:"
-git status --short
-
-changed_files_after=$(git status --short)
-changed_files_count=$(($(echo "$changed_files_after" | wc --lines) - 1))
+changed_files_after=$(git status --porcelain)
+changed_files_count=$(($(echo "$changed_files_after" | wc --lines)))
 
 echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
 # Fail on change
 if [[ $changed_files_count -gt 0 ]]; then
+    echo ""
+    echo "Files that need formatting:"
+    git status --short
     echo ""
     echo "Failure: $changed_files_count files need formatting."
   exit 1
