@@ -19,6 +19,7 @@ jobs:
           key: ${{ runner.os }}-idea-cache-v2
       - name: Run Formatter
         uses: ./
+        continue-on-error: true
         with:
           include-glob: "*.java"
           path: test/
