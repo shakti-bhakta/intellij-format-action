@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ## Exit immediately if any command fails
-#set -e
 
 if [[ $# -ne 3 ]]; then
   echo 'Exactly three parameters required: path, include-pattern, style-settings-file'
@@ -19,8 +18,6 @@ echo "style-settings-file: $style_settings_file"
 
 
 style_flags="-allowDefaults"
-
-
 
 if [[ "$path/$style_settings_file" != "unset" ]]; then
   if [ ! -f "$path/$style_settings_file" ]; then
@@ -53,7 +50,7 @@ changed_files_before=$(git status --short)
 echo "Running format.sh..."
 
 # Run format.sh and print output directly to the console
-if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -dry -r .; then
+if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -r .; then
   echo "Error: format.sh command failed."
   exit 1
 fi
