@@ -36,7 +36,9 @@ jobs:
           echo "Formatter failed as expected. Job will succeed."
       - name: Clean git changes
         run: |
+          git status
           git checkout .
+          git status
       - name: Formatter should succeed
         uses: ./
         with:
