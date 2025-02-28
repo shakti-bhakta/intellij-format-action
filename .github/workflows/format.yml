@@ -34,6 +34,9 @@ jobs:
         if: steps.formatter-fail.outcome == 'failure'
         run: |
           echo "Formatter failed as expected. Job will succeed."
+      - name: Clean git changes
+        run: |
+          git checkout .
       - name: Formatter should succeed
         uses: ./
         with:
