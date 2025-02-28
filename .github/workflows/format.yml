@@ -20,7 +20,7 @@ jobs:
       - name: Run Formatter
         uses: ./
         with:
-          include-pattern: "*.java"
+          include-glob: "*.java"
           path: test/
-          style-settings-file: "custom_intellij_format.xml"
+          style-settings-file: "../custom_intellij_format.xml"
 
