@@ -1,7 +1,7 @@
 # IntelliJ IDEA Format Action
 
 Check if code complies with IntelliJ code style XML.
-Fails the action if it doesn't
+Fails the action if any files need formatting.
 
 ## Example
 
@@ -26,10 +26,8 @@ jobs:
       - uses: shakti-bhakta/intellij-format-action@v2
         with:
           include-glob: '*.java'
-          path: './java-module'
-          style-settings-file: './intellij-format.xml'
-          
-
+          path: 'java-module/'
+          style-settings-file: 'custom-intellij-format.xml'
 ```
 
 ## Inputs

@@ -9,9 +9,21 @@ base_path=$1
 include_pattern=$2
 style_settings_file=$3
 
+echo 'Input: path, include-glob, style-settings-file'
+echo base_path
+echo include_pattern
+echo style_settings_file
+
+
 style_flags="-allowDefaults"
 
+
+
 if [[ "$style_settings_file" != "unset" ]]; then
+  if [ ! -f "$style_settings_file" ]; then
+    echo "Error: style-settings-file '$style_settings_file' does not exist."
+    exit 1
+  fi
   style_flags="-s $style_settings_file"
 fi
 
@@ -30,7 +42,11 @@ git config --global --add safe.directory /github/workspace
 cd "/github/workspace/$base_path" || exit 2
 changed_files_before=$(git status --short)
 
-"$IDEA_DIR/bin/format.sh" -m $include_pattern $style_flags -r .
+# Run the format.sh command and capture its exit code
+if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -dry -r .; then
+  echo "Error: format.sh command failed."
+  exit 1
+fi
 
 changed_files_after=$(git status --short)
 changed_files=$(diff <(echo "$changed_files_before") <(echo "$changed_files_after"))

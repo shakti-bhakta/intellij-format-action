@@ -2,6 +2,8 @@ name: IntelliJ Test Format
 
 on:
   pull_request:
+  push:
+    branches: [ "main" ]
 
 jobs:
   formatting:
@@ -20,5 +22,5 @@ jobs:
         with:
           include-glob: "*.java"
           path: test/
-          style-settings-file: "./custom_intellij_format"
+          style-settings-file: "custom_intellij_format.xml"
 
