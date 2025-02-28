@@ -56,9 +56,8 @@ if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -r .; then
   exit 1
 fi
 
-changed_files_after=$(git status --porcelain)
-changed_files_count=$(($(echo "$changed_files_after" | wc --lines)))
-echo $changed_files_count
+changed_files_after=$(git status --short)
+changed_files_count=$(echo "$changed_files_after" | grep -v '^$' | wc --lines)
 
 echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
