@@ -49,27 +49,26 @@ changed_files_before=$(git status --short)
 # Run the format.sh command and print its output to the console
 echo "Running format.sh..."
 
+
 # Run format.sh and print output directly to the console
 if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -r .; then
   echo "Error: format.sh command failed."
   exit 1
 fi
 
-echo "Git status after formatting:"
+echo "Files that need formatting:"
 git status --short
 
 changed_files_after=$(git status --short)
 changed_files=$(diff <(echo "$changed_files_before") <(echo "$changed_files_after"))
 changed_files_count=$(($(echo "$changed_files" | wc --lines) - 1))
-echo "Changed files:"
-echo "$changed_files"
 
 echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
 # Fail on change
 if [[ $changed_files_count -gt 0 ]]; then
-    echo "Error: Files were changed by the formatter."
+    echo "Error: $changed_files_count files need formatting."
   exit 1
 fi
 
-echo "Formatting completed successfully. No changes detected."
+echo "Formatting check completed successfully. No changes needed."
