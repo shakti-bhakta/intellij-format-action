@@ -59,6 +59,12 @@ if [ $format_exit_code -ne 0 ]; then
   exit 1
 fi
 
+echo "Contents of format_output.log:"
+cat format_output.log
+
+echo "Git status after formatting:"
+git status --short
+
 changed_files_after=$(git status --short)
 changed_files=$(diff <(echo "$changed_files_before") <(echo "$changed_files_after"))
 changed_files_count=$(($(echo "$changed_files" | wc --lines) - 1))
