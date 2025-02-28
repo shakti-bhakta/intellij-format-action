@@ -51,8 +51,11 @@ changed_files_before=$(git status --short)
 
 # Run the format.sh command and print its output to the console
 echo "Running format.sh..."
-if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -dry -r . 2>&1 | tee format_output.log; then
-  echo "Error: format.sh command failed."
+"$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -dry -r . 2>&1 | tee format_output.log
+format_exit_code=${PIPESTATUS[0]}  # Capture the exit code of format.sh
+
+if [ $format_exit_code -ne 0 ]; then
+  echo "Error: format.sh command failed with exit code $format_exit_code."
   exit 1
 fi
 
