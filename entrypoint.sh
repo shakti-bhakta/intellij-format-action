@@ -14,8 +14,8 @@ style_settings_file=$3
 
 echo '--- Input ---'
 echo "path: $path"
-echo "include_pattern: $include_pattern"
-echo "style_settings_file: $style_settings_file"
+echo "include-pattern: $include_pattern"
+echo "style-settings-file: $style_settings_file"
 
 
 style_flags="-allowDefaults"
