@@ -22,9 +22,9 @@ style_flags="-allowDefaults"
 
 
 
-if [[ "$style_settings_file" != "unset" ]]; then
-  if [ ! -f "$style_settings_file" ]; then
-    echo "Error: style-settings-file '$style_settings_file' does not exist."
+if [[ "$path/$style_settings_file" != "unset" ]]; then
+  if [ ! -f "$path/$style_settings_file" ]; then
+    echo "Error: style-settings-file '$path/$style_settings_file' does not exist."
     exit 1
   fi
   style_flags="-s $style_settings_file"

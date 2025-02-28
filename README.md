@@ -46,7 +46,7 @@ Path to project directory. The formatter is executed recursively from here. Must
 
 ### `style-settings-file`
 
-A path to IntelliJ IDEA code style settings .xml file.<br>
+A path to IntelliJ IDEA code style settings .xml file. Is relative to the provided `path`. <br>
 **Default:** `unset` (`-allowDefaults` argument)
 
 ## Outputs
