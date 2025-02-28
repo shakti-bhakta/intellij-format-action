@@ -17,11 +17,32 @@ jobs:
         with:
           path: /home/runner/work/_temp/_github_workflow/idea-cache
           key: ${{ runner.os }}-idea-cache-v2
-      - name: Run Formatter
+      - name: Formatter should fail
+        id: formatter-fail
         uses: ./
         continue-on-error: true
         with:
           include-glob: "*.java"
-          path: test/
-          style-settings-file: "../custom_intellij_format.xml"
+          path: test/formatting_necessary
+          style-settings-file: "../../custom_intellij_format.xml"
+      - name: Fail the job if formatter succeeds
+        if: steps.formatter-fail.outcome == 'success'
+        run: |
+          echo "Formatter succeeded, but we want it to fail. Failing the job..."
+          exit 1
+      - name: Succeed the job if formatter fails
+        if: steps.formatter-fail.outcome == 'failure'
+        run: |
+          echo "Formatter failed as expected. Job will succeed."
+      - name: Clean git changes
+        run: |
+          git status
+          git checkout .
+          git status
+      - name: Formatter should succeed
+        uses: ./
+        with:
+          include-glob: "*.java"
+          path: test/no_formatting_necessary
+          style-settings-file: "../../custom_intellij_format.xml"
 

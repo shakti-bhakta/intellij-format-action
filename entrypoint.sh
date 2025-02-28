@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ## Exit immediately if any command fails
-#set -e
 
 if [[ $# -ne 3 ]]; then
   echo 'Exactly three parameters required: path, include-pattern, style-settings-file'
@@ -19,8 +18,6 @@ echo "style-settings-file: $style_settings_file"
 
 
 style_flags="-allowDefaults"
-
-
 
 if [[ "$path/$style_settings_file" != "unset" ]]; then
   if [ ! -f "$path/$style_settings_file" ]; then
@@ -51,30 +48,28 @@ changed_files_before=$(git status --short)
 
 # Run the format.sh command and print its output to the console
 echo "Running format.sh..."
-"$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -dry -r . 2>&1 | tee format_output.log
-format_exit_code=${PIPESTATUS[0]}  # Capture the exit code of format.sh
 
-if [ $format_exit_code -ne 0 ]; then
-  echo "Error: format.sh command failed with exit code $format_exit_code."
+
+# Run format.sh and print output directly to the console
+if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -r .; then
+  echo "Error: format.sh command failed."
   exit 1
 fi
 
-echo "Contents of format_output.log:"
-cat format_output.log
-
-echo "Git status after formatting:"
-git status --short
-
 changed_files_after=$(git status --short)
-changed_files=$(diff <(echo "$changed_files_before") <(echo "$changed_files_after"))
-changed_files_count=$(($(echo "$changed_files" | wc --lines) - 1))
+changed_files_count=$(echo "$changed_files_after" | grep -v '^$' | wc --lines)
 
-echo "$changed_files"
 echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
 # Fail on change
 if [[ $changed_files_count -gt 0 ]]; then
+    echo ""
+    echo "Files that need formatting:"
+    git status --porcelain
+    echo ""
+    echo "Failure: $changed_files_count files need formatting."
   exit 1
 fi
 
-echo "Formatting completed successfully. No changes detected."
+echo ""
+echo "Formatting check completed successfully. No changes needed."
