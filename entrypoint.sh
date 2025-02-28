@@ -56,8 +56,6 @@ if ! "$IDEA_DIR/bin/format.sh" -m "$include_pattern" $style_flags -r .; then
   exit 1
 fi
 
-git diff
-
 echo ""
 echo "Files that need formatting:"
 git status --short
