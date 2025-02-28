@@ -63,7 +63,7 @@ echo "Files that need formatting:"
 git status --short
 
 changed_files_after=$(git status --short)
-changed_files_count=$(($(echo "$changed_files_after" | wc --lines)))
+changed_files_count=$(($(echo "$changed_files_after" | wc --lines) - 1))
 
 echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 
