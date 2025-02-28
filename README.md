@@ -25,7 +25,7 @@ jobs:
           key: ${{ runner.os }}-idea-cache-v2
       - uses: shakti-bhakta/intellij-format-action@v2
         with:
-          include-glob: '*.java'
+          include-pattern: '*.java'
           path: 'java-module/'
           style-settings-file: 'custom-intellij-format.xml'
 ```
@@ -34,7 +34,7 @@ jobs:
 
 While none of these inputs are mandatory, you can specify them to modify the action's behavior.
 
-### `include-glob`
+### `include-pattern`
 
 Pattern for files to include. Supports glob-style wildcards. Multiple patterns can be separated by commas.<br>
 **Default:** `*`
@@ -46,7 +46,7 @@ Path to project directory. The formatter is executed recursively from here. Must
 
 ### `style-settings-file`
 
-A path to IntelliJ IDEA code style settings .xml file.<br>
+A path to IntelliJ IDEA code style settings .xml file. Is relative to the provided `path`. <br>
 **Default:** `unset` (`-allowDefaults` argument)
 
 ## Outputs

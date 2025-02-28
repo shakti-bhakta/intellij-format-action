@@ -8,7 +8,7 @@ inputs:
       Path to project directory. The formatter is executed recursively from here. Must be relative to the workspace.
     required: false
     default: '.'
-  include-glob:
+  include-pattern:
     description: |
       Pattern for files to include. Supports glob-style wildcards. Multiple patterns can be separated by commas.
     required: false
@@ -25,5 +25,5 @@ runs:
   image: Dockerfile
   args:
     - ${{ inputs.path }}
-    - ${{ inputs.include-glob }}
+    - ${{ inputs.include-pattern }}
     - ${{ inputs.style-settings-file }}
